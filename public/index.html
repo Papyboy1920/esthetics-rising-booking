@@ -82,6 +82,9 @@
   .mc-msg{text-align:center; font-size:15px; margin-top:8px; line-height:1.5;}
   .mc-msg .es{display:block; font-style:italic; color:var(--gold); font-size:13px;}
   .mc-msg.bad{color:var(--bad);}
+  .arrive{border:1px solid var(--gold-l); background:#faf3dd; border-radius:9px; padding:12px 14px; margin-top:13px; text-align:left; font-size:14.5px; line-height:1.55; color:var(--dark);}
+  .arrive .a-head{display:block; font-size:12px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:5px;}
+  .arrive .es{display:block; font-style:italic; color:var(--gold); font-size:13px; margin-top:4px;}
   .forget{display:block; margin:10px auto 0; background:none; border:none; color:var(--gold-l); font-family:inherit;
           font-style:italic; font-size:13px; cursor:pointer; text-decoration:underline;}
 </style>
@@ -224,7 +227,13 @@ function progressHTML(b){
     svcLines +
     "<div class='mc-when'>" + fmtWhen(b.date, b.time) + "</div>" +
     "<div class='steps'>" + steps + "</div>" +
-    "<p class='mc-msg" + (bad ? " bad" : "") + "'>" + m.en + "<span class='es'>" + m.es + "</span></p>";
+    "<p class='mc-msg" + (bad ? " bad" : "") + "'>" + m.en + "<span class='es'>" + m.es + "</span></p>" +
+    (bad ? "" :
+      "<div class='arrive'><span class='a-head'>When you arrive · Cuando llegues</span>" +
+      "Please bring a <b>photo ID</b>. Check in with <b>security</b> at the front of the building, " +
+      "then proceed to <b>Room 215</b> — that's where Esthetics Rising is." +
+      "<span class='es'>Por favor trae una identificación con foto. Regístrate con seguridad en la " +
+      "entrada del edificio y luego dirígete al salón 215 — ahí está Esthetics Rising.</span></div>");
 }
 
 async function fetchBooking(number, phone){
