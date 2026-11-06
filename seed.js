@@ -66,8 +66,11 @@ const SEED_CATALOG = {
 // openDays: 0=domingo ... 6=sábado. capacity: cupos por horario.
 const SEED_SETTINGS = {
   openDays: [1, 2, 3, 4, 5],
-  slots: ["9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"],
-  capacity: 3
+  slots: ["9:00 – 10:15 AM", "11:30 AM – 1:30 PM"],
+  capacity: 3,
+  version: 2
 };
 
-module.exports = { SEED_CATALOG, CATALOG_VERSION, SEED_SETTINGS };
+const SETTINGS_VERSION = 2;
+
+module.exports = { SEED_CATALOG, CATALOG_VERSION, SEED_SETTINGS, SETTINGS_VERSION };

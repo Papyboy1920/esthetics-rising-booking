@@ -5,7 +5,7 @@
 // ============================================================
 
 const path = require("path");
-const { SEED_CATALOG, CATALOG_VERSION, SEED_SETTINGS } = require("./seed");
+const { SEED_CATALOG, CATALOG_VERSION, SEED_SETTINGS, SETTINGS_VERSION } = require("./seed");
 
 let kind = null;
 let pool = null;
@@ -172,7 +172,17 @@ async function kvSet(key, value) {
 // ---------- catálogo y ajustes ----------
 async function getCatalog() { return JSON.parse(await kvGet("catalog")); }
 async function setCatalog(cat) { await kvSet("catalog", JSON.stringify(cat)); }
-async function getSettings() { return JSON.parse(await kvGet("settings")); }
+async function getSettings() {
+  const s = JSON.parse(await kvGet("settings"));
+  if (!s) return { ...SEED_SETTINGS };
+  if ((s.version || 0) < SETTINGS_VERSION) {
+    // Migración de horario: se imponen los bloques vigentes (SEED_SETTINGS);
+    // días abiertos y cupo guardados se respetan. Al guardar desde /store
+    // la versión queda estampada y manda lo guardado.
+    return { ...s, slots: [...SEED_SETTINGS.slots], version: SETTINGS_VERSION };
+  }
+  return s;
+}
 async function setSettings(s) { await kvSet("settings", JSON.stringify(s)); }
 
 // ---------- reservas ----------

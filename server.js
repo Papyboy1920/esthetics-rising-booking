@@ -13,6 +13,7 @@ const path = require("path");
 const crypto = require("crypto");
 const db = require("./db");
 const suspend = require("./suspend");
+const { SETTINGS_VERSION } = require("./seed");
 
 const PORT = process.env.PORT || 3000;
 const STORE_KEY = process.env.STORE_KEY || "";
@@ -96,8 +97,9 @@ app.put("/api/settings", requireStore, async (req, res) => {
   }
   const clean = {
     openDays: openDays.map(Number).filter((d) => d >= 0 && d <= 6),
-    slots: slots.map((s) => String(s).trim().slice(0, 12)).filter(Boolean),
-    capacity: Math.min(20, Math.max(1, Number(capacity)))
+    slots: slots.map((s) => String(s).trim().slice(0, 24)).filter(Boolean),
+    capacity: Math.min(20, Math.max(1, Number(capacity))),
+    version: SETTINGS_VERSION
   };
   await db.setSettings(clean);
   broadcast("settings-updated", clean);
