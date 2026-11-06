@@ -106,7 +106,15 @@
       </div>
       <div id="bookingList"></div>
       <p class="msg" id="bkMsg"></p>
-      <button class="act danger" id="clearBtn" style="margin-top:8px;">Clear all bookings (test cleanup)</button>
+      <div class="card" style="margin-top:16px;">
+        <div style="font-size:12px; letter-spacing:1px; color:var(--gold); text-transform:uppercase; margin-bottom:9px;">Clean up · keep what you want to save</div>
+        <div class="actions" style="margin-top:0;">
+          <button class="act" id="clearCancelled">Clear cancelled</button>
+          <button class="act" id="clearNoShow">Clear no-shows</button>
+          <button class="act" id="clearDone">Clear completed</button>
+          <button class="act danger" id="clearBtn">Clear ALL bookings</button>
+        </div>
+      </div>
     </section>
 
     <section id="tab-services" class="hidden">
@@ -196,9 +204,16 @@ function renderBookings(){
       (b.status === "confirmed" ? "<button class='act primary' data-a='done'>Mark done</button><button class='act' data-a='no-show'>No-show</button>" : "") +
       (b.status !== "cancelled" && b.status !== "done" ? "<button class='act danger' data-a='cancelled'>Cancel</button>" : "") +
       (b.status === "cancelled" || b.status === "no-show" ? "<button class='act' data-a='pending'>Reopen</button>" : "") +
+      "<button class='act danger' data-del='1' title='Delete this booking'>🗑 Delete</button>" +
       "</div>";
     el.querySelectorAll("button.act").forEach(btn => {
       btn.onclick = async () => {
+        if (btn.dataset.del){
+          if (!confirm("Delete booking " + b.number + " (" + b.customer.name + ")? This cannot be undone.")) return;
+          await api("/api/bookings/" + b.id, { method: "DELETE" });
+          await refreshAll();
+          return;
+        }
         await api("/api/bookings/" + b.id, { method: "PATCH", headers: H(), body: JSON.stringify({ status: btn.dataset.a }) });
         await refreshAll();
       };
@@ -216,6 +231,18 @@ $("clearBtn").onclick = async () => {
   await api("/api/bookings", { method: "DELETE" });
   await refreshAll();
 };
+async function clearByStatus(status, label){
+  const n = bookings.filter(b => b.status === status).length;
+  if (!n){ $("bkMsg").textContent = "No " + label + " bookings to clear."; return; }
+  if (!confirm("Delete " + n + " " + label + " booking(s)? Everything else stays saved.")) return;
+  const r = await api("/api/bookings?status=" + status, { method: "DELETE" });
+  const data = await r.json().catch(() => ({}));
+  await refreshAll();
+  $("bkMsg").textContent = "Cleared " + (data.deleted ?? n) + " " + label + " booking(s) ✓";
+}
+$("clearCancelled").onclick = () => clearByStatus("cancelled", "cancelled");
+$("clearNoShow").onclick = () => clearByStatus("no-show", "no-show");
+$("clearDone").onclick = () => clearByStatus("done", "completed");
 
 // ---------- Services editor ----------
 function renderCatalog(){
@@ -300,6 +327,7 @@ function connectSSE(){
     await onChange();
   });
   es.addEventListener("booking-status", onChange);
+  es.addEventListener("bookings-cleared", onChange);
   es.addEventListener("catalog-updated", onChange);
   es.addEventListener("settings-updated", onChange);
   es.onerror = () => { $("liveBox").textContent = "reconnecting…"; };

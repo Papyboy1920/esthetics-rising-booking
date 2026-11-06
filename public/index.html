@@ -17,12 +17,15 @@
   header img{width:170px; height:170px; object-fit:contain;}
   h1{font-size:27px; letter-spacing:6px; color:var(--dark); font-weight:600; margin-top:8px;}
   .college{font-style:italic; color:var(--gold); font-size:16px; margin-top:3px;}
-  .tag{font-style:italic; color:var(--gold); font-size:14px; margin-top:8px;}
+  .tag{font-style:italic; color:var(--gold); font-size:14px; margin-top:8px; line-height:1.5;}
   .rule{display:flex; align-items:center; gap:10px; margin:20px auto 4px; max-width:340px;}
   .rule span{flex:1; border-top:1px solid var(--gold-l);}
   .rule i{color:var(--gold); font-style:normal; font-size:11px;}
-  h2{font-size:19px; letter-spacing:3px; color:var(--gold); text-align:center; margin:26px 0 12px; font-weight:600;}
+  h2{font-size:19px; letter-spacing:3px; color:var(--gold); text-align:center; margin:26px 0 4px; font-weight:600;}
+  h2 .es{display:block; font-size:13px; letter-spacing:1px; font-style:italic; text-transform:none; color:var(--gold-l); margin-top:3px;}
+  .sub{text-align:center; font-style:italic; color:var(--gold); font-size:15px; line-height:1.55;}
   .dept{font-size:15px; letter-spacing:2px; color:var(--gold); margin:18px 0 8px; text-transform:uppercase;}
+  .dept .es{font-size:12px; letter-spacing:0; font-style:italic; text-transform:none; color:var(--gold-l); margin-left:7px;}
   .svc{display:flex; justify-content:space-between; align-items:center; gap:10px; width:100%;
        background:#fff; border:1px solid var(--line); border-radius:10px; padding:13px 15px; margin-bottom:8px;
        cursor:pointer; font-family:inherit; text-align:left; font-size:16px; color:var(--ink);}
@@ -30,6 +33,7 @@
   .svc .price{font-weight:bold; color:var(--dark); white-space:nowrap;}
   .svc.sel{border-color:var(--gold); background:#faf3dd; box-shadow:0 0 0 1px var(--gold);}
   label{display:block; font-size:14px; letter-spacing:1px; color:var(--gold); margin:14px 0 6px; text-transform:uppercase;}
+  label .es{font-size:12px; letter-spacing:0; font-style:italic; text-transform:none; color:var(--gold-l);}
   input[type="date"], input[type="text"], input[type="tel"], textarea{
     width:100%; padding:12px; border:1px solid var(--line); border-radius:8px; font-family:inherit; font-size:16px; background:#fff; color:var(--ink);}
   .slots{display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;}
@@ -39,9 +43,10 @@
   .slot .left{display:block; font-size:11px; font-style:italic; color:var(--gold);}
   .slot.sel .left{color:#ffe9a8;}
   .bigbtn{width:100%; margin-top:24px; background:var(--gold); color:#fff; border:none; border-radius:10px;
-          padding:16px; font-family:inherit; font-size:18px; letter-spacing:2px; cursor:pointer;}
+          padding:15px; font-family:inherit; font-size:18px; letter-spacing:2px; cursor:pointer; line-height:1.3;}
+  .bigbtn small{display:block; font-size:12px; letter-spacing:1px; font-style:italic; opacity:.85;}
   .bigbtn:disabled{opacity:.45; cursor:not-allowed;}
-  .msg{margin-top:14px; text-align:center; font-size:15px; min-height:20px;}
+  .msg{margin-top:14px; text-align:center; font-size:15px; min-height:20px; line-height:1.5;}
   .msg.err{color:var(--bad);}
   .confirm{text-align:center; padding:10px 0;}
   .confirm .num{font-size:44px; letter-spacing:3px; color:var(--dark); margin:8px 0;}
@@ -49,11 +54,30 @@
                   padding:5px 14px; border-radius:16px; font-size:14px; letter-spacing:1px;}
   .confirm p{margin-top:10px; font-size:16px; line-height:1.5;}
   .trackbox{margin-top:34px; border-top:1px solid var(--line); padding-top:6px;}
-  .statusbadge{font-weight:bold;}
-  .st-pending{color:#8a6d1f;} .st-confirmed{color:var(--ok);} .st-done{color:var(--dark);}
-  .st-cancelled,.st-no-show{color:var(--bad);}
   footer{text-align:center; margin-top:30px; color:var(--gold); font-style:italic; font-size:14px; line-height:1.6;}
   .hidden{display:none;}
+  /* ---- progress tracker ---- */
+  .mycard{border:1px solid var(--gold-l); background:#fffdf6; border-radius:12px; padding:16px; margin:18px 0 6px;}
+  .mycard .mc-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap;}
+  .mycard .mc-num{font-weight:bold; color:var(--dark); letter-spacing:1px;}
+  .mycard .mc-svc{font-size:16px; margin-top:2px;}
+  .mycard .mc-svc small{display:block; font-style:italic; color:var(--gold); font-size:13px;}
+  .mycard .mc-when{color:var(--gold); font-style:italic; font-size:14px; margin-top:2px;}
+  .steps{display:flex; align-items:flex-start; margin:18px 2px 6px;}
+  .step{flex:1; text-align:center; position:relative;}
+  .step .dot{width:26px; height:26px; border-radius:50%; border:2px solid var(--gold-l); background:#fff;
+             margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--gold); position:relative; z-index:2;}
+  .step.on .dot{background:var(--gold); border-color:var(--gold); color:#fff;}
+  .step .bar{position:absolute; top:13px; left:-50%; width:100%; height:3px; background:var(--line); z-index:1;}
+  .step.on .bar{background:var(--gold);}
+  .step:first-child .bar{display:none;}
+  .step .cap{font-size:12px; letter-spacing:1px; margin-top:7px; color:var(--gold); text-transform:uppercase;}
+  .step .cap small{display:block; font-size:11px; font-style:italic; text-transform:none; letter-spacing:0; color:var(--gold-l);}
+  .mc-msg{text-align:center; font-size:15px; margin-top:8px; line-height:1.5;}
+  .mc-msg .es{display:block; font-style:italic; color:var(--gold); font-size:13px;}
+  .mc-msg.bad{color:var(--bad);}
+  .forget{display:block; margin:10px auto 0; background:none; border:none; color:var(--gold-l); font-family:inherit;
+          font-style:italic; font-size:13px; cursor:pointer; text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -65,43 +89,46 @@
         <img src="/img/phoenix.png" alt="Esthetics Rising phoenix logo">
         <h1>ESTHETICS RISING</h1>
         <div class="college">South Dade Technical College</div>
-        <div class="tag">Skin · Confidence · Careers — Rising to our maximum potential</div>
+        <div class="tag">Skin · Confidence · Careers — Rising to our maximum potential<br>
+          <span>Piel · Confianza · Carreras — Elevándonos a nuestro máximo potencial</span></div>
         <div class="rule"><span></span><i>◆</i><span></span></div>
       </header>
 
-      <h2>BOOK A SERVICE</h2>
-      <p style="text-align:center; font-style:italic; color:var(--gold); font-size:15px;">
-        Services performed by our students, guided by master instructors.
-      </p>
+      <div id="myCard" class="hidden"></div>
+
+      <h2>BOOK A SERVICE <span class="es">Reserva un servicio</span></h2>
+      <p class="sub">Services performed by our students, guided by master instructors.<br>
+        Servicios realizados por nuestras estudiantes, guiadas por instructoras expertas.</p>
 
       <div id="services"></div>
 
-      <label for="date">Pick a day</label>
+      <label for="date">Pick a day <span class="es">· Elige el día</span></label>
       <input type="date" id="date">
       <div id="slotWrap" class="hidden">
-        <label>Pick a time</label>
+        <label>Pick a time <span class="es">· Elige la hora</span></label>
         <div class="slots" id="slots"></div>
       </div>
       <p class="msg" id="dayMsg"></p>
 
-      <label for="name">Your name</label>
-      <input type="text" id="name" autocomplete="name" placeholder="Full name">
-      <label for="phone">Your phone</label>
+      <label for="name">Your name <span class="es">· Tu nombre</span></label>
+      <input type="text" id="name" autocomplete="name" placeholder="Full name · Nombre completo">
+      <label for="phone">Your phone <span class="es">· Tu teléfono</span></label>
       <input type="tel" id="phone" autocomplete="tel" placeholder="(305) 555-0123">
-      <label for="notes">Notes (optional)</label>
-      <textarea id="notes" rows="2" placeholder="Anything we should know?"></textarea>
+      <label for="notes">Notes (optional) <span class="es">· Notas (opcional)</span></label>
+      <textarea id="notes" rows="2" placeholder="Anything we should know? · ¿Algo que debamos saber?"></textarea>
 
-      <button class="bigbtn" id="bookBtn" disabled>BOOK MY SERVICE</button>
+      <button class="bigbtn" id="bookBtn" disabled>BOOK MY SERVICE<small>Reservar mi servicio</small></button>
       <p class="msg" id="formMsg"></p>
 
       <div class="trackbox">
-        <h2>CHECK MY BOOKING</h2>
-        <label for="tNum">Booking number</label>
+        <h2>CHECK MY BOOKING <span class="es">Revisa tu reserva</span></h2>
+        <label for="tNum">Booking number <span class="es">· Número de reserva</span></label>
         <input type="text" id="tNum" placeholder="#001">
-        <label for="tPhone">Phone used to book</label>
+        <label for="tPhone">Phone used to book <span class="es">· Teléfono de la reserva</span></label>
         <input type="tel" id="tPhone" placeholder="(305) 555-0123">
-        <button class="bigbtn" id="trackBtn" style="margin-top:16px;">CHECK STATUS</button>
+        <button class="bigbtn" id="trackBtn" style="margin-top:16px;">CHECK STATUS<small>Revisar estado</small></button>
         <p class="msg" id="trackMsg"></p>
+        <div id="trackCard"></div>
       </div>
     </div>
 
@@ -110,21 +137,23 @@
         <img src="/img/phoenix.png" alt="Esthetics Rising phoenix logo" style="width:130px;height:130px;">
       </header>
       <div class="confirm">
-        <div class="badge">BOOKING RECEIVED</div>
+        <div class="badge">BOOKING RECEIVED · RESERVA RECIBIDA</div>
         <div class="num" id="cNum">#000</div>
         <p id="cWhat"></p>
         <p id="cWhen"></p>
+        <div id="doneCard"></div>
         <p style="font-style:italic; color:var(--gold);">
-          Your booking is <b>pending</b> — our team will confirm it shortly.<br>
-          Save your booking number to check your status anytime.
+          This page remembers your booking — come back anytime to watch it move.<br>
+          Esta página recuerda tu reserva — vuelve cuando quieras para ver su progreso.
         </p>
-        <button class="bigbtn" id="againBtn" style="max-width:320px;">BOOK ANOTHER SERVICE</button>
+        <button class="bigbtn" id="againBtn" style="max-width:340px;">BOOK ANOTHER SERVICE<small>Reservar otro servicio</small></button>
       </div>
     </div>
 
     <footer>
       Esthetics Rising · South Dade Technical College<br>
-      Building leaders to infinite potential
+      Building leaders to infinite potential<br>
+      Formando líderes con potencial infinito
     </footer>
   </div>
 </div>
@@ -140,7 +169,72 @@ function todayStr(){
   const d = new Date(), p = (n) => String(n).padStart(2, "0");
   return d.getFullYear() + "-" + p(d.getMonth()+1) + "-" + p(d.getDate());
 }
+function fmtWhen(ds, time){
+  const d = new Date(ds + "T12:00:00");
+  return d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }) + " at " + time;
+}
 
+// ---------- progress tracker ----------
+const STEP_DEFS = [
+  { key: "received",  en: "Received",  es: "Recibida" },
+  { key: "confirmed", en: "Confirmed", es: "Confirmada" },
+  { key: "done",      en: "Completed", es: "Completada" }
+];
+const STATUS_STEP = { pending: 0, confirmed: 1, done: 2 };
+const STATUS_MSG = {
+  pending:   { en: "We received your booking — our team will confirm it shortly.",
+               es: "Recibimos tu reserva — nuestro equipo la confirmará pronto." },
+  confirmed: { en: "Confirmed — see you then!", es: "¡Confirmada — te esperamos!" },
+  done:      { en: "Completed — thank you for rising with us.", es: "Completada — gracias por elevarte con nosotras." },
+  cancelled: { en: "This booking was cancelled. Please book again or call the school.",
+               es: "Esta reserva fue cancelada. Reserva de nuevo o llama a la escuela." },
+  "no-show": { en: "This booking was marked as a no-show.", es: "Esta reserva fue marcada como inasistencia." }
+};
+
+function progressHTML(b){
+  const bad = b.status === "cancelled" || b.status === "no-show";
+  const upto = STATUS_STEP[b.status];
+  let steps = "";
+  STEP_DEFS.forEach((s, i) => {
+    const on = !bad && upto !== undefined && i <= upto;
+    steps += "<div class='step" + (on ? " on" : "") + "'><div class='bar'></div>" +
+      "<div class='dot'>" + (on ? "✓" : (i + 1)) + "</div>" +
+      "<div class='cap'>" + s.en + "<small>" + s.es + "</small></div></div>";
+  });
+  const m = STATUS_MSG[b.status] || STATUS_MSG.pending;
+  return "<div class='mc-head'><span class='mc-num'>" + b.number + "</span>" +
+    "<span style='color:var(--gold); font-style:italic; font-size:14px;'>" + money(b.price) + "</span></div>" +
+    "<div class='mc-svc'>" + b.service + (b.serviceEs ? "<small>" + b.serviceEs + "</small>" : "") + "</div>" +
+    "<div class='mc-when'>" + fmtWhen(b.date, b.time) + "</div>" +
+    "<div class='steps'>" + steps + "</div>" +
+    "<p class='mc-msg" + (bad ? " bad" : "") + "'>" + m.en + "<span class='es'>" + m.es + "</span></p>";
+}
+
+async function fetchBooking(number, phone){
+  const r = await fetch("/api/track?number=" + encodeURIComponent(number) + "&phone=" + encodeURIComponent(phone));
+  if (!r.ok) return null;
+  return await r.json();
+}
+
+async function showMyCard(){
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem("er_my_booking") || "null"); } catch (e) {}
+  const box = $("myCard");
+  if (!saved || !saved.number || !saved.phone){ box.classList.add("hidden"); box.innerHTML = ""; return; }
+  const b = await fetchBooking(saved.number, saved.phone);
+  if (!b){ box.classList.add("hidden"); box.innerHTML = ""; return; }
+  box.innerHTML = "<div style='text-align:center; font-size:13px; letter-spacing:2px; color:var(--gold);'>" +
+    "YOUR BOOKING · TU RESERVA</div>" + progressHTML(b) +
+    "<button class='forget' id='forgetBtn'>Not my booking · No es mi reserva</button>";
+  box.classList.remove("hidden");
+  box.classList.add("mycard");
+  $("forgetBtn").onclick = () => {
+    localStorage.removeItem("er_my_booking");
+    box.classList.add("hidden"); box.innerHTML = "";
+  };
+}
+
+// ---------- booking form ----------
 async function load(){
   catalog = await (await fetch("/api/catalog")).json();
   settings = await (await fetch("/api/settings")).json();
@@ -148,14 +242,17 @@ async function load(){
   box.innerHTML = "";
   for (const d of catalog.departments){
     const h = document.createElement("div");
-    h.className = "dept"; h.textContent = d.name;
+    h.className = "dept";
+    h.innerHTML = d.name + (d.nameEs ? "<span class='es'>" + d.nameEs + "</span>" : "");
     box.appendChild(h);
     for (const c of d.categories) for (const it of c.items){
       if (!it.active) continue;
       const b = document.createElement("button");
       b.className = "svc"; b.dataset.id = it.id;
-      b.innerHTML = "<span>" + it.name + (it.desc ? "<small>" + it.desc + "</small>" : "") +
-                    "</span><span class='price'>" + money(it.price) + "</span>";
+      b.innerHTML = "<span>" + it.name +
+        (it.nameEs ? "<small>" + it.nameEs + "</small>" : "") +
+        (it.desc ? "<small>" + it.desc + "</small>" : "") +
+        "</span><span class='price'>" + money(it.price) + "</span>";
       b.onclick = () => {
         document.querySelectorAll(".svc").forEach(x => x.classList.remove("sel"));
         b.classList.add("sel");
@@ -173,6 +270,7 @@ async function load(){
   dateEl.addEventListener("change", loadSlots);
   $("name").addEventListener("input", validate);
   $("phone").addEventListener("input", validate);
+  showMyCard();
 }
 
 async function loadSlots(){
@@ -184,7 +282,7 @@ async function loadSlots(){
   const r = await (await fetch("/api/availability?date=" + date)).json();
   if (!r.open){
     wrap.classList.add("hidden");
-    msg.textContent = "We are closed that day — please pick another date.";
+    msg.innerHTML = "We are closed that day — please pick another date.<br><span style='font-style:italic; color:var(--gold);'>Cerramos ese día — elige otra fecha, por favor.</span>";
     msg.classList.add("err");
     validate(); return;
   }
@@ -192,8 +290,8 @@ async function loadSlots(){
   for (const s of r.slots){
     const b = document.createElement("button");
     b.className = "slot"; b.type = "button";
-    b.innerHTML = s.time + (s.left <= 2 && s.left > 0 ? "<span class='left'>" + s.left + " left</span>" : "");
-    if (s.left <= 0){ b.disabled = true; b.innerHTML = s.time + "<span class='left'>full</span>"; }
+    b.innerHTML = s.time + (s.left <= 2 && s.left > 0 ? "<span class='left'>" + s.left + " left · quedan " + s.left + "</span>" : "");
+    if (s.left <= 0){ b.disabled = true; b.innerHTML = s.time + "<span class='left'>full · lleno</span>"; }
     b.onclick = () => {
       document.querySelectorAll(".slot").forEach(x => x.classList.remove("sel"));
       b.classList.add("sel");
@@ -225,10 +323,23 @@ $("bookBtn").onclick = async () => {
     });
     const data = await r.json();
     if (!r.ok) throw new Error(data.error || "Something went wrong.");
+    try {
+      localStorage.setItem("er_my_booking", JSON.stringify({
+        number: data.number, phone: data.customer.phone
+      }));
+    } catch (e) {}
     $("cNum").textContent = data.number;
-    $("cWhat").textContent = data.service.name + " — " + money(data.service.price);
-    const d = new Date(data.date + "T12:00:00");
-    $("cWhen").textContent = d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }) + " at " + data.time;
+    $("cWhat").innerHTML = data.service.name + " — " + money(data.service.price) +
+      (data.service.nameEs ? "<br><span style='font-style:italic; color:var(--gold); font-size:14px;'>" + data.service.nameEs + "</span>" : "");
+    $("cWhen").textContent = fmtWhen(data.date, data.time);
+    $("doneCard").innerHTML = "";
+    const card = document.createElement("div");
+    card.className = "mycard";
+    card.innerHTML = progressHTML({
+      number: data.number, service: data.service.name, serviceEs: data.service.nameEs || "",
+      price: data.service.price, date: data.date, time: data.time, status: data.status
+    });
+    $("doneCard").appendChild(card);
     $("bookView").classList.add("hidden");
     $("doneView").classList.remove("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -243,17 +354,23 @@ $("againBtn").onclick = () => location.reload();
 $("trackBtn").onclick = async () => {
   const msg = $("trackMsg");
   msg.textContent = ""; msg.className = "msg";
+  $("trackCard").innerHTML = "";
   const num = $("tNum").value.trim(), phone = $("tPhone").value.trim();
-  if (!num || !phone){ msg.textContent = "Enter your booking number and phone."; msg.classList.add("err"); return; }
-  const r = await fetch("/api/track?number=" + encodeURIComponent(num) + "&phone=" + encodeURIComponent(phone));
-  const data = await r.json();
-  if (!r.ok){ msg.textContent = data.error || "Not found."; msg.classList.add("err"); return; }
-  const labels = { pending: "Pending — waiting for confirmation", confirmed: "Confirmed — see you then!",
-    done: "Completed", cancelled: "Cancelled", "no-show": "Marked as no-show" };
-  const d = new Date(data.date + "T12:00:00");
-  msg.innerHTML = "<b>" + data.number + "</b> · " + data.service + " · " +
-    d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + " at " + data.time +
-    "<br>Status: <span class='statusbadge st-" + data.status + "'>" + (labels[data.status] || data.status) + "</span>";
+  if (!num || !phone){
+    msg.innerHTML = "Enter your booking number and phone.<br><span style='font-style:italic; color:var(--gold);'>Escribe tu número de reserva y tu teléfono.</span>";
+    msg.classList.add("err"); return;
+  }
+  const b = await fetchBooking(num, phone);
+  if (!b){
+    msg.innerHTML = "Booking not found — check the number and phone.<br><span style='font-style:italic; color:var(--gold);'>No encontramos esa reserva — revisa el número y el teléfono.</span>";
+    msg.classList.add("err"); return;
+  }
+  try { localStorage.setItem("er_my_booking", JSON.stringify({ number: b.number, phone })); } catch (e) {}
+  const card = document.createElement("div");
+  card.className = "mycard";
+  card.innerHTML = progressHTML(b);
+  $("trackCard").appendChild(card);
+  showMyCard();
 };
 
 load();
