@@ -177,10 +177,26 @@ async function setSettings(s) { await kvSet("settings", JSON.stringify(s)); }
 
 // ---------- reservas ----------
 function mapBooking(row) {
+  let svc = null;
+  try { svc = JSON.parse(row.service); } catch { svc = null; }
+  let services, total;
+  if (svc && Array.isArray(svc.services)) {
+    services = svc.services;
+    total = svc.total != null ? svc.total : services.reduce((s, x) => s + (x.price || 0), 0);
+  } else if (svc && svc.id) {
+    // Formato v1: un solo servicio por reserva.
+    services = [svc];
+    total = svc.price || 0;
+  } else {
+    services = [];
+    total = 0;
+  }
   return {
     id: row.id,
     number: row.number,
-    service: JSON.parse(row.service),
+    service: services[0] || null,
+    services,
+    total,
     customer: JSON.parse(row.customer),
     date: row.date,
     time: row.time,

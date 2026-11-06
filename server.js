@@ -143,9 +143,10 @@ function findItem(catalog, itemId) {
   return null;
 }
 
-// Público: los clientes reservan sin clave.
+// Público: los clientes reservan sin clave. Una reserva puede
+// llevar varios servicios (serviceIds) o uno solo (serviceId).
 app.post("/api/bookings", async (req, res) => {
-  const { serviceId, customer, date, time, notes } = req.body || {};
+  const { serviceId, serviceIds, customer, date, time, notes } = req.body || {};
 
   if (!customer || !String(customer.name || "").trim() || !String(customer.phone || "").trim()) {
     return res.status(400).json({ error: "Name and phone are required." });
@@ -162,10 +163,19 @@ app.post("/api/bookings", async (req, res) => {
     return res.status(400).json({ error: "Please pick one of the available times." });
   }
   const catalog = await db.getCatalog();
-  const item = findItem(catalog, serviceId);
-  if (!item || !item.active) {
-    return res.status(400).json({ error: "That service is not available right now." });
+  const ids = Array.isArray(serviceIds) && serviceIds.length ? serviceIds : (serviceId ? [serviceId] : []);
+  if (!ids.length) {
+    return res.status(400).json({ error: "Please pick at least one service." });
   }
+  const snapshots = [];
+  for (const id of [...new Set(ids)].slice(0, 12)) {
+    const item = findItem(catalog, id);
+    if (!item || !item.active) {
+      return res.status(400).json({ error: "One of those services is not available right now." });
+    }
+    snapshots.push({ id: item.id, name: item.name, nameEs: item.nameEs || "", price: item.price });
+  }
+  const total = Math.round(snapshots.reduce((s, x) => s + x.price, 0) * 100) / 100;
   const used = await db.countActiveForSlot(date, time);
   if (used >= settings.capacity) {
     return res.status(409).json({ error: "That time just filled up. Please pick another time." });
@@ -174,7 +184,7 @@ app.post("/api/bookings", async (req, res) => {
   const number = await db.nextBookingNumber();
   const booking = await db.createBooking({
     number,
-    service: { id: item.id, name: item.name, nameEs: item.nameEs || "", price: item.price },
+    service: { services: snapshots, total },
     customer: {
       name: String(customer.name).trim().slice(0, 80),
       phone: String(customer.phone).trim().slice(0, 30)
@@ -195,7 +205,10 @@ app.get("/api/track", async (req, res) => {
   const b = await db.findByNumberAndPhone(number, phone);
   if (!b) return res.status(404).json({ error: "Booking not found. Check the number and phone." });
   res.json({
-    number: b.number, service: b.service.name, serviceEs: b.service.nameEs || "", price: b.service.price,
+    number: b.number,
+    service: b.services[0] ? b.services[0].name : "",
+    serviceEs: b.services[0] ? (b.services[0].nameEs || "") : "",
+    services: b.services, total: b.total, price: b.total,
     date: b.date, time: b.time, status: b.status
   });
 });
