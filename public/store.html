@@ -190,12 +190,16 @@ function renderBookings(){
   const box = $("bookingList");
   box.innerHTML = list.length ? "" : "<div class='card' style='text-align:center; color:#9a917e;'>No bookings here yet.</div>";
   for (const b of list){
+    const svcArr = (b.services && b.services.length) ? b.services : (b.service ? [b.service] : []);
+    const svcHtml = svcArr.map(s =>
+      "<div class='svc' style='font-size:15px;'>" + s.name + " · " + money(s.price) + "</div>").join("") +
+      (svcArr.length > 1 ? "<div class='meta'><b>Total: " + money(b.total) + "</b> · " + svcArr.length + " services</div>" : "");
     const el = document.createElement("div");
     el.className = "card bkg";
     el.innerHTML =
       "<div class='top'><span class='num'>" + b.number + "</span>" +
       "<span class='badge st-" + b.status + "'>" + STATUS_LABEL[b.status] + "</span></div>" +
-      "<div class='svc'>" + b.service.name + " · " + money(b.service.price) + "</div>" +
+      svcHtml +
       "<div class='meta'>" + fmtDate(b.date) + " at " + b.time + "<br>" +
       b.customer.name + " · <a href='tel:" + b.customer.phone + "' style='color:var(--gold)'>" + b.customer.phone + "</a></div>" +
       (b.notes ? "<div class='notes'>“" + b.notes + "”</div>" : "") +

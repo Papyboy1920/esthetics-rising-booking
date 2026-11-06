@@ -32,6 +32,12 @@
   .svc small{display:block; font-style:italic; color:var(--gold); font-size:13px; margin-top:2px;}
   .svc .price{font-weight:bold; color:var(--dark); white-space:nowrap;}
   .svc.sel{border-color:var(--gold); background:#faf3dd; box-shadow:0 0 0 1px var(--gold);}
+  .selsum{border:1px solid var(--gold-l); background:#faf3dd; border-radius:10px; padding:13px 15px; margin:4px 0 6px;}
+  .selsum .ss-head{font-size:13px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:7px;}
+  .selsum .ss-line{display:flex; justify-content:space-between; font-size:15px; margin-top:3px;}
+  .selsum .ss-line small{font-style:italic; color:var(--gold); font-size:12px; display:block;}
+  .selsum .ss-total{display:flex; justify-content:space-between; border-top:1px solid var(--gold-l); margin-top:9px; padding-top:8px; font-weight:bold; color:var(--dark); font-size:17px;}
+  .pick-hint{text-align:center; font-style:italic; color:var(--gold-l); font-size:13px; margin-top:2px;}
   label{display:block; font-size:14px; letter-spacing:1px; color:var(--gold); margin:14px 0 6px; text-transform:uppercase;}
   label .es{font-size:12px; letter-spacing:0; font-style:italic; text-transform:none; color:var(--gold-l);}
   input[type="date"], input[type="text"], input[type="tel"], textarea{
@@ -99,8 +105,11 @@
       <h2>BOOK A SERVICE <span class="es">Reserva un servicio</span></h2>
       <p class="sub">Services performed by our students, guided by master instructors.<br>
         Servicios realizados por nuestras estudiantes, guiadas por instructoras expertas.</p>
+      <p class="pick-hint">Tap everything you'd like — you can book several services in one visit.<br>
+        Toca todo lo que quieras — puedes reservar varios servicios en una sola visita.</p>
 
       <div id="services"></div>
+      <div id="selSummary" class="hidden"></div>
 
       <label for="date">Pick a day <span class="es">· Elige el día</span></label>
       <input type="date" id="date">
@@ -160,7 +169,8 @@
 
 <script>
 let catalog = null, settings = null;
-let selService = null, selTime = null;
+const selServices = new Map(); // id -> item
+let selTime = null;
 
 const $ = (id) => document.getElementById(id);
 const money = (n) => "$" + (Number.isInteger(n) ? n : Number(n).toFixed(2));
@@ -202,9 +212,16 @@ function progressHTML(b){
       "<div class='cap'>" + s.en + "<small>" + s.es + "</small></div></div>";
   });
   const m = STATUS_MSG[b.status] || STATUS_MSG.pending;
+  const svcs = (b.services && b.services.length)
+    ? b.services
+    : [{ name: b.service, nameEs: b.serviceEs || "", price: b.price }];
+  const total = b.total != null ? b.total : svcs.reduce((s, x) => s + (x.price || 0), 0);
+  const svcLines = svcs.map(s =>
+    "<div class='mc-svc'>" + s.name + " · " + money(s.price) +
+    (s.nameEs ? "<small>" + s.nameEs + "</small>" : "") + "</div>").join("");
   return "<div class='mc-head'><span class='mc-num'>" + b.number + "</span>" +
-    "<span style='color:var(--gold); font-style:italic; font-size:14px;'>" + money(b.price) + "</span></div>" +
-    "<div class='mc-svc'>" + b.service + (b.serviceEs ? "<small>" + b.serviceEs + "</small>" : "") + "</div>" +
+    "<span style='color:var(--dark); font-weight:bold; font-size:15px;'>Total " + money(total) + "</span></div>" +
+    svcLines +
     "<div class='mc-when'>" + fmtWhen(b.date, b.time) + "</div>" +
     "<div class='steps'>" + steps + "</div>" +
     "<p class='mc-msg" + (bad ? " bad" : "") + "'>" + m.en + "<span class='es'>" + m.es + "</span></p>";
@@ -254,9 +271,9 @@ async function load(){
         (it.desc ? "<small>" + it.desc + "</small>" : "") +
         "</span><span class='price'>" + money(it.price) + "</span>";
       b.onclick = () => {
-        document.querySelectorAll(".svc").forEach(x => x.classList.remove("sel"));
-        b.classList.add("sel");
-        selService = it;
+        if (selServices.has(it.id)) { selServices.delete(it.id); b.classList.remove("sel"); }
+        else { selServices.set(it.id, it); b.classList.add("sel"); }
+        renderSummary();
         validate();
       };
       box.appendChild(b);
@@ -303,8 +320,24 @@ async function loadSlots(){
   validate();
 }
 
+function renderSummary(){
+  const box = $("selSummary");
+  if (!selServices.size){ box.classList.add("hidden"); box.innerHTML = ""; return; }
+  let total = 0, lines = "";
+  for (const it of selServices.values()){
+    total += it.price;
+    lines += "<div class='ss-line'><span>" + it.name +
+      (it.nameEs ? "<small>" + it.nameEs + "</small>" : "") +
+      "</span><span>" + money(it.price) + "</span></div>";
+  }
+  box.innerHTML = "<div class='ss-head'>Your services · Tus servicios</div>" + lines +
+    "<div class='ss-total'><span>Total</span><span>" + money(total) + "</span></div>";
+  box.classList.remove("hidden");
+  box.classList.add("selsum");
+}
+
 function validate(){
-  $("bookBtn").disabled = !(selService && $("date").value && selTime &&
+  $("bookBtn").disabled = !(selServices.size && $("date").value && selTime &&
     $("name").value.trim() && $("phone").value.trim());
 }
 
@@ -316,7 +349,7 @@ $("bookBtn").onclick = async () => {
     const r = await fetch("/api/bookings", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        serviceId: selService.id,
+        serviceIds: [...selServices.keys()],
         customer: { name: $("name").value, phone: $("phone").value },
         date: $("date").value, time: selTime, notes: $("notes").value
       })
@@ -329,15 +362,17 @@ $("bookBtn").onclick = async () => {
       }));
     } catch (e) {}
     $("cNum").textContent = data.number;
-    $("cWhat").innerHTML = data.service.name + " — " + money(data.service.price) +
-      (data.service.nameEs ? "<br><span style='font-style:italic; color:var(--gold); font-size:14px;'>" + data.service.nameEs + "</span>" : "");
+    $("cWhat").innerHTML = data.services.map(s =>
+      s.name + " — " + money(s.price) +
+      (s.nameEs ? " <span style='font-style:italic; color:var(--gold); font-size:14px;'>(" + s.nameEs + ")</span>" : "")
+    ).join("<br>") + "<br><b>Total: " + money(data.total) + "</b>";
     $("cWhen").textContent = fmtWhen(data.date, data.time);
     $("doneCard").innerHTML = "";
     const card = document.createElement("div");
     card.className = "mycard";
     card.innerHTML = progressHTML({
-      number: data.number, service: data.service.name, serviceEs: data.service.nameEs || "",
-      price: data.service.price, date: data.date, time: data.time, status: data.status
+      number: data.number, services: data.services, total: data.total,
+      date: data.date, time: data.time, status: data.status
     });
     $("doneCard").appendChild(card);
     $("bookView").classList.add("hidden");
