@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esthetics Rising — Book a Service</title>
+<style>
+  :root{
+    --cream:#f8f6ea; --paper:#fffdf6; --ink:#3a2e1a; --dark:#43351d;
+    --gold:#967634; --gold-l:#c4a55c; --line:#e3d9bd; --ok:#2e7d32; --bad:#b3261e;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:Georgia,'Times New Roman',serif; background:var(--cream); color:var(--ink); padding:18px 14px 60px;}
+  .wrap{max-width:680px; margin:0 auto;}
+  .frame{background:var(--paper); border:2px solid #b08d3e; outline:1px solid var(--gold-l); outline-offset:5px; padding:30px 22px 36px;}
+  header{text-align:center;}
+  header img{width:170px; height:170px; object-fit:contain;}
+  h1{font-size:27px; letter-spacing:6px; color:var(--dark); font-weight:600; margin-top:8px;}
+  .college{font-style:italic; color:var(--gold); font-size:16px; margin-top:3px;}
+  .tag{font-style:italic; color:var(--gold); font-size:14px; margin-top:8px;}
+  .rule{display:flex; align-items:center; gap:10px; margin:20px auto 4px; max-width:340px;}
+  .rule span{flex:1; border-top:1px solid var(--gold-l);}
+  .rule i{color:var(--gold); font-style:normal; font-size:11px;}
+  h2{font-size:19px; letter-spacing:3px; color:var(--gold); text-align:center; margin:26px 0 12px; font-weight:600;}
+  .dept{font-size:15px; letter-spacing:2px; color:var(--gold); margin:18px 0 8px; text-transform:uppercase;}
+  .svc{display:flex; justify-content:space-between; align-items:center; gap:10px; width:100%;
+       background:#fff; border:1px solid var(--line); border-radius:10px; padding:13px 15px; margin-bottom:8px;
+       cursor:pointer; font-family:inherit; text-align:left; font-size:16px; color:var(--ink);}
+  .svc small{display:block; font-style:italic; color:var(--gold); font-size:13px; margin-top:2px;}
+  .svc .price{font-weight:bold; color:var(--dark); white-space:nowrap;}
+  .svc.sel{border-color:var(--gold); background:#faf3dd; box-shadow:0 0 0 1px var(--gold);}
+  label{display:block; font-size:14px; letter-spacing:1px; color:var(--gold); margin:14px 0 6px; text-transform:uppercase;}
+  input[type="date"], input[type="text"], input[type="tel"], textarea{
+    width:100%; padding:12px; border:1px solid var(--line); border-radius:8px; font-family:inherit; font-size:16px; background:#fff; color:var(--ink);}
+  .slots{display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;}
+  .slot{border:1px solid var(--line); background:#fff; border-radius:20px; padding:9px 15px; font-family:inherit; font-size:15px; cursor:pointer; color:var(--ink);}
+  .slot.sel{background:var(--gold); color:#fff; border-color:var(--gold);}
+  .slot:disabled{opacity:.38; cursor:not-allowed; text-decoration:line-through;}
+  .slot .left{display:block; font-size:11px; font-style:italic; color:var(--gold);}
+  .slot.sel .left{color:#ffe9a8;}
+  .bigbtn{width:100%; margin-top:24px; background:var(--gold); color:#fff; border:none; border-radius:10px;
+          padding:16px; font-family:inherit; font-size:18px; letter-spacing:2px; cursor:pointer;}
+  .bigbtn:disabled{opacity:.45; cursor:not-allowed;}
+  .msg{margin-top:14px; text-align:center; font-size:15px; min-height:20px;}
+  .msg.err{color:var(--bad);}
+  .confirm{text-align:center; padding:10px 0;}
+  .confirm .num{font-size:44px; letter-spacing:3px; color:var(--dark); margin:8px 0;}
+  .confirm .badge{display:inline-block; background:#fdf0d5; color:#8a6d1f; border:1px solid var(--gold-l);
+                  padding:5px 14px; border-radius:16px; font-size:14px; letter-spacing:1px;}
+  .confirm p{margin-top:10px; font-size:16px; line-height:1.5;}
+  .trackbox{margin-top:34px; border-top:1px solid var(--line); padding-top:6px;}
+  .statusbadge{font-weight:bold;}
+  .st-pending{color:#8a6d1f;} .st-confirmed{color:var(--ok);} .st-done{color:var(--dark);}
+  .st-cancelled,.st-no-show{color:var(--bad);}
+  footer{text-align:center; margin-top:30px; color:var(--gold); font-style:italic; font-size:14px; line-height:1.6;}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="frame">
+
+    <div id="bookView">
+      <header>
+        <img src="/img/phoenix.png" alt="Esthetics Rising phoenix logo">
+        <h1>ESTHETICS RISING</h1>
+        <div class="college">South Dade Technical College</div>
+        <div class="tag">Skin · Confidence · Careers — Rising to our maximum potential</div>
+        <div class="rule"><span></span><i>◆</i><span></span></div>
+      </header>
+
+      <h2>BOOK A SERVICE</h2>
+      <p style="text-align:center; font-style:italic; color:var(--gold); font-size:15px;">
+        Services performed by our students, guided by master instructors.
+      </p>
+
+      <div id="services"></div>
+
+      <label for="date">Pick a day</label>
+      <input type="date" id="date">
+      <div id="slotWrap" class="hidden">
+        <label>Pick a time</label>
+        <div class="slots" id="slots"></div>
+      </div>
+      <p class="msg" id="dayMsg"></p>
+
+      <label for="name">Your name</label>
+      <input type="text" id="name" autocomplete="name" placeholder="Full name">
+      <label for="phone">Your phone</label>
+      <input type="tel" id="phone" autocomplete="tel" placeholder="(305) 555-0123">
+      <label for="notes">Notes (optional)</label>
+      <textarea id="notes" rows="2" placeholder="Anything we should know?"></textarea>
+
+      <button class="bigbtn" id="bookBtn" disabled>BOOK MY SERVICE</button>
+      <p class="msg" id="formMsg"></p>
+
+      <div class="trackbox">
+        <h2>CHECK MY BOOKING</h2>
+        <label for="tNum">Booking number</label>
+        <input type="text" id="tNum" placeholder="#001">
+        <label for="tPhone">Phone used to book</label>
+        <input type="tel" id="tPhone" placeholder="(305) 555-0123">
+        <button class="bigbtn" id="trackBtn" style="margin-top:16px;">CHECK STATUS</button>
+        <p class="msg" id="trackMsg"></p>
+      </div>
+    </div>
+
+    <div id="doneView" class="hidden">
+      <header>
+        <img src="/img/phoenix.png" alt="Esthetics Rising phoenix logo" style="width:130px;height:130px;">
+      </header>
+      <div class="confirm">
+        <div class="badge">BOOKING RECEIVED</div>
+        <div class="num" id="cNum">#000</div>
+        <p id="cWhat"></p>
+        <p id="cWhen"></p>
+        <p style="font-style:italic; color:var(--gold);">
+          Your booking is <b>pending</b> — our team will confirm it shortly.<br>
+          Save your booking number to check your status anytime.
+        </p>
+        <button class="bigbtn" id="againBtn" style="max-width:320px;">BOOK ANOTHER SERVICE</button>
+      </div>
+    </div>
+
+    <footer>
+      Esthetics Rising · South Dade Technical College<br>
+      Building leaders to infinite potential
+    </footer>
+  </div>
+</div>
+
+<script>
+let catalog = null, settings = null;
+let selService = null, selTime = null;
+
+const $ = (id) => document.getElementById(id);
+const money = (n) => "$" + (Number.isInteger(n) ? n : Number(n).toFixed(2));
+
+function todayStr(){
+  const d = new Date(), p = (n) => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + p(d.getMonth()+1) + "-" + p(d.getDate());
+}
+
+async function load(){
+  catalog = await (await fetch("/api/catalog")).json();
+  settings = await (await fetch("/api/settings")).json();
+  const box = $("services");
+  box.innerHTML = "";
+  for (const d of catalog.departments){
+    const h = document.createElement("div");
+    h.className = "dept"; h.textContent = d.name;
+    box.appendChild(h);
+    for (const c of d.categories) for (const it of c.items){
+      if (!it.active) continue;
+      const b = document.createElement("button");
+      b.className = "svc"; b.dataset.id = it.id;
+      b.innerHTML = "<span>" + it.name + (it.desc ? "<small>" + it.desc + "</small>" : "") +
+                    "</span><span class='price'>" + money(it.price) + "</span>";
+      b.onclick = () => {
+        document.querySelectorAll(".svc").forEach(x => x.classList.remove("sel"));
+        b.classList.add("sel");
+        selService = it;
+        validate();
+      };
+      box.appendChild(b);
+    }
+  }
+  const dateEl = $("date");
+  dateEl.min = todayStr();
+  dateEl.max = (() => { const d = new Date(); d.setDate(d.getDate() + 60);
+    const p = (n) => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + p(d.getMonth()+1) + "-" + p(d.getDate()); })();
+  dateEl.addEventListener("change", loadSlots);
+  $("name").addEventListener("input", validate);
+  $("phone").addEventListener("input", validate);
+}
+
+async function loadSlots(){
+  selTime = null;
+  const date = $("date").value;
+  const wrap = $("slotWrap"), box = $("slots"), msg = $("dayMsg");
+  box.innerHTML = ""; msg.textContent = ""; msg.className = "msg";
+  if (!date){ wrap.classList.add("hidden"); validate(); return; }
+  const r = await (await fetch("/api/availability?date=" + date)).json();
+  if (!r.open){
+    wrap.classList.add("hidden");
+    msg.textContent = "We are closed that day — please pick another date.";
+    msg.classList.add("err");
+    validate(); return;
+  }
+  wrap.classList.remove("hidden");
+  for (const s of r.slots){
+    const b = document.createElement("button");
+    b.className = "slot"; b.type = "button";
+    b.innerHTML = s.time + (s.left <= 2 && s.left > 0 ? "<span class='left'>" + s.left + " left</span>" : "");
+    if (s.left <= 0){ b.disabled = true; b.innerHTML = s.time + "<span class='left'>full</span>"; }
+    b.onclick = () => {
+      document.querySelectorAll(".slot").forEach(x => x.classList.remove("sel"));
+      b.classList.add("sel");
+      selTime = s.time;
+      validate();
+    };
+    box.appendChild(b);
+  }
+  validate();
+}
+
+function validate(){
+  $("bookBtn").disabled = !(selService && $("date").value && selTime &&
+    $("name").value.trim() && $("phone").value.trim());
+}
+
+$("bookBtn").onclick = async () => {
+  const msg = $("formMsg");
+  msg.textContent = ""; msg.className = "msg";
+  $("bookBtn").disabled = true;
+  try {
+    const r = await fetch("/api/bookings", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        serviceId: selService.id,
+        customer: { name: $("name").value, phone: $("phone").value },
+        date: $("date").value, time: selTime, notes: $("notes").value
+      })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || "Something went wrong.");
+    $("cNum").textContent = data.number;
+    $("cWhat").textContent = data.service.name + " — " + money(data.service.price);
+    const d = new Date(data.date + "T12:00:00");
+    $("cWhen").textContent = d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }) + " at " + data.time;
+    $("bookView").classList.add("hidden");
+    $("doneView").classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (e) {
+    msg.textContent = e.message; msg.classList.add("err");
+    if (/filled up/i.test(e.message)) loadSlots();
+  } finally { validate(); }
+};
+
+$("againBtn").onclick = () => location.reload();
+
+$("trackBtn").onclick = async () => {
+  const msg = $("trackMsg");
+  msg.textContent = ""; msg.className = "msg";
+  const num = $("tNum").value.trim(), phone = $("tPhone").value.trim();
+  if (!num || !phone){ msg.textContent = "Enter your booking number and phone."; msg.classList.add("err"); return; }
+  const r = await fetch("/api/track?number=" + encodeURIComponent(num) + "&phone=" + encodeURIComponent(phone));
+  const data = await r.json();
+  if (!r.ok){ msg.textContent = data.error || "Not found."; msg.classList.add("err"); return; }
+  const labels = { pending: "Pending — waiting for confirmation", confirmed: "Confirmed — see you then!",
+    done: "Completed", cancelled: "Cancelled", "no-show": "Marked as no-show" };
+  const d = new Date(data.date + "T12:00:00");
+  msg.innerHTML = "<b>" + data.number + "</b> · " + data.service + " · " +
+    d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + " at " + data.time +
+    "<br>Status: <span class='statusbadge st-" + data.status + "'>" + (labels[data.status] || data.status) + "</span>";
+};
+
+load();
+</script>
+</body>
+</html>
