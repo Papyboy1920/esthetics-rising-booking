@@ -174,7 +174,7 @@ app.post("/api/bookings", async (req, res) => {
   const number = await db.nextBookingNumber();
   const booking = await db.createBooking({
     number,
-    service: { id: item.id, name: item.name, price: item.price },
+    service: { id: item.id, name: item.name, nameEs: item.nameEs || "", price: item.price },
     customer: {
       name: String(customer.name).trim().slice(0, 80),
       phone: String(customer.phone).trim().slice(0, 30)
@@ -195,7 +195,7 @@ app.get("/api/track", async (req, res) => {
   const b = await db.findByNumberAndPhone(number, phone);
   if (!b) return res.status(404).json({ error: "Booking not found. Check the number and phone." });
   res.json({
-    number: b.number, service: b.service.name, price: b.service.price,
+    number: b.number, service: b.service.name, serviceEs: b.service.nameEs || "", price: b.service.price,
     date: b.date, time: b.time, status: b.status
   });
 });
@@ -216,7 +216,25 @@ app.patch("/api/bookings/:id", requireStore, async (req, res) => {
   res.json(updated);
 });
 
+// Limpieza selectiva: ?status=cancelled|done|... borra solo ese estado;
+// sin parámetro borra todo. Borrar una sola: DELETE /api/bookings/:id
+app.delete("/api/bookings/:id", requireStore, async (req, res) => {
+  const ok = await db.deleteBooking(req.params.id);
+  if (!ok) return res.status(404).json({ error: "Booking not found." });
+  broadcast("bookings-cleared", {});
+  res.json({ ok: true });
+});
+
 app.delete("/api/bookings", requireStore, async (req, res) => {
+  const status = String(req.query.status || "");
+  if (status) {
+    if (!VALID_STATUS.includes(status)) {
+      return res.status(400).json({ error: "Invalid status." });
+    }
+    const n = await db.deleteBookingsByStatus(status);
+    broadcast("bookings-cleared", {});
+    return res.json({ ok: true, deleted: n });
+  }
   await db.deleteAllBookings();
   broadcast("bookings-cleared", {});
   res.json({ ok: true });

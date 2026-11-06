@@ -69,6 +69,10 @@ function mergeCatalog(live, seed) {
       d.img = sDept.img;
       filled++;
     }
+    if ((d.nameEs === undefined || d.nameEs === null || d.nameEs === "") && sDept.nameEs) {
+      d.nameEs = sDept.nameEs;
+      filled++;
+    }
     d.categories = d.categories || [];
     for (const sCat of sDept.categories || []) {
       let c = byId(d.categories, sCat.id);
@@ -84,7 +88,7 @@ function mergeCatalog(live, seed) {
           c.items.push(JSON.parse(JSON.stringify(sItem)));
           added++;
         } else {
-          for (const f of ["desc", "img"]) {
+          for (const f of ["desc", "img", "nameEs"]) {
             if ((it[f] === undefined || it[f] === null || it[f] === "") && sItem[f]) {
               it[f] = sItem[f];
               filled++;
@@ -270,10 +274,30 @@ async function deleteAllBookings() {
   }
 }
 
+// Borrado selectivo desde /store: una reserva o todas las de un estado.
+async function deleteBooking(id) {
+  if (kind === "pg") {
+    const r = await pool.query("DELETE FROM bookings WHERE id = $1", [id]);
+    return r.rowCount > 0;
+  }
+  const info = sdb.prepare("DELETE FROM bookings WHERE id = ?").run(id);
+  return info.changes > 0;
+}
+
+async function deleteBookingsByStatus(status) {
+  if (kind === "pg") {
+    const r = await pool.query("DELETE FROM bookings WHERE status = $1", [status]);
+    return r.rowCount;
+  }
+  const info = sdb.prepare("DELETE FROM bookings WHERE status = ?").run(status);
+  return info.changes;
+}
+
 module.exports = {
   init, dbKind, kvGet, kvSet,
   getCatalog, setCatalog, getSettings, setSettings,
   nextBookingNumber, createBooking, listBookings,
   countActiveForSlot, findByNumberAndPhone,
-  updateBookingStatus, deleteAllBookings
+  updateBookingStatus, deleteAllBookings,
+  deleteBooking, deleteBookingsByStatus
 };

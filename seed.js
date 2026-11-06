@@ -5,57 +5,57 @@
 // nunca se sobrescribe (ver mergeCatalog en db.js).
 // ============================================================
 
-const CATALOG_VERSION = 1;
+const CATALOG_VERSION = 2;
 
 const SEED_CATALOG = {
   departments: [
     {
-      id: "facials", name: "Facials", img: "", categories: [
+      id: "facials", name: "Facials", nameEs: "Faciales", img: "", categories: [
         { id: "facials-main", name: "Facials", items: [
-          { id: "facial", name: "Facial", price: 15, unit: "service", desc: "", img: "", active: true },
-          { id: "machine-addon", name: "Machine Add-On · Microdermabrasion / High Frequency", price: 5, unit: "add-on", desc: "Add to any facial", img: "", active: true }
+          { id: "facial", name: "Facial", nameEs: "Tratamiento facial", price: 15, unit: "service", desc: "", img: "", active: true },
+          { id: "machine-addon", name: "Machine Add-On · Microdermabrasion / High Frequency", nameEs: "Adicional de máquina · Microdermoabrasión / Alta frecuencia", price: 5, unit: "add-on", desc: "Add to any facial", img: "", active: true }
         ] }
       ]
     },
     {
-      id: "waxing", name: "Waxing", img: "", categories: [
+      id: "waxing", name: "Waxing", nameEs: "Depilación con cera", img: "", categories: [
         { id: "waxing-main", name: "Waxing", items: [
-          { id: "wax-sideburns", name: "Sideburns", price: 10, unit: "service", desc: "", img: "", active: true },
-          { id: "wax-lip", name: "Lip", price: 5, unit: "service", desc: "", img: "", active: true },
-          { id: "wax-eyebrows", name: "Eyebrows", price: 10, unit: "service", desc: "", img: "", active: true },
-          { id: "wax-legs", name: "Legs", price: 15, unit: "service", desc: "", img: "", active: true },
-          { id: "wax-arms", name: "Arms", price: 15, unit: "service", desc: "", img: "", active: true },
-          { id: "wax-thighs", name: "Thighs", price: 15, unit: "service", desc: "", img: "", active: true }
+          { id: "wax-sideburns", name: "Sideburns", nameEs: "Patillas", price: 10, unit: "service", desc: "", img: "", active: true },
+          { id: "wax-lip", name: "Lip", nameEs: "Labio superior", price: 5, unit: "service", desc: "", img: "", active: true },
+          { id: "wax-eyebrows", name: "Eyebrows", nameEs: "Cejas", price: 10, unit: "service", desc: "", img: "", active: true },
+          { id: "wax-legs", name: "Legs", nameEs: "Piernas", price: 15, unit: "service", desc: "", img: "", active: true },
+          { id: "wax-arms", name: "Arms", nameEs: "Brazos", price: 15, unit: "service", desc: "", img: "", active: true },
+          { id: "wax-thighs", name: "Thighs", nameEs: "Muslos", price: 15, unit: "service", desc: "", img: "", active: true }
         ] }
       ]
     },
     {
-      id: "lashes", name: "Lashes", img: "", categories: [
+      id: "lashes", name: "Lashes", nameEs: "Pestañas", img: "", categories: [
         { id: "lashes-main", name: "Lashes", items: [
-          { id: "strip-lashes", name: "Strip Lashes", price: 10, unit: "service", desc: "", img: "", active: true },
-          { id: "cluster-lashes", name: "Cluster Lashes", price: 20, unit: "service", desc: "", img: "", active: true },
-          { id: "ext-classic", name: "Lash Extensions — Classic", price: 60, unit: "service", desc: "", img: "", active: true },
-          { id: "ext-hybrid", name: "Lash Extensions — Hybrid", price: 75, unit: "service", desc: "", img: "", active: true },
-          { id: "ext-volume", name: "Lash Extensions — Volume", price: 90, unit: "service", desc: "", img: "", active: true }
+          { id: "strip-lashes", name: "Strip Lashes", nameEs: "Pestañas en tira", price: 10, unit: "service", desc: "", img: "", active: true },
+          { id: "cluster-lashes", name: "Cluster Lashes", nameEs: "Pestañas en racimo", price: 20, unit: "service", desc: "", img: "", active: true },
+          { id: "ext-classic", name: "Lash Extensions — Classic", nameEs: "Extensiones de pestañas — Clásicas", price: 60, unit: "service", desc: "", img: "", active: true },
+          { id: "ext-hybrid", name: "Lash Extensions — Hybrid", nameEs: "Extensiones de pestañas — Híbridas", price: 75, unit: "service", desc: "", img: "", active: true },
+          { id: "ext-volume", name: "Lash Extensions — Volume", nameEs: "Extensiones de pestañas — Volumen", price: 90, unit: "service", desc: "", img: "", active: true }
         ] }
       ]
     },
     {
-      id: "lash-brow", name: "Lash & Brow", img: "", categories: [
+      id: "lash-brow", name: "Lash & Brow", nameEs: "Pestañas y cejas", img: "", categories: [
         { id: "lash-brow-main", name: "Lash & Brow", items: [
-          { id: "lash-lift", name: "Lash Lift", price: 15, unit: "service", desc: "", img: "", active: true },
-          { id: "lash-lift-tint", name: "Lash Lift + Tint", price: 20, unit: "service", desc: "", img: "", active: true },
-          { id: "brow-lamination", name: "Brow Lamination", price: 15, unit: "service", desc: "", img: "", active: true },
-          { id: "brow-mapping-tint", name: "Brow Mapping & Tint (add-on)", price: 10, unit: "add-on", desc: "Add to brow lamination", img: "", active: true },
-          { id: "combo-rising", name: "Combo — Lift & Tint + Lamination, Mapping & Tint", price: 40, unit: "service", desc: "", img: "", active: true }
+          { id: "lash-lift", name: "Lash Lift", nameEs: "Levantamiento de pestañas", price: 15, unit: "service", desc: "", img: "", active: true },
+          { id: "lash-lift-tint", name: "Lash Lift + Tint", nameEs: "Levantamiento de pestañas + tinte", price: 20, unit: "service", desc: "", img: "", active: true },
+          { id: "brow-lamination", name: "Brow Lamination", nameEs: "Laminado de cejas", price: 15, unit: "service", desc: "", img: "", active: true },
+          { id: "brow-mapping-tint", name: "Brow Mapping & Tint (add-on)", nameEs: "Diseño y tinte de cejas (adicional)", price: 10, unit: "add-on", desc: "Add to brow lamination", img: "", active: true },
+          { id: "combo-rising", name: "Combo — Lift & Tint + Lamination, Mapping & Tint", nameEs: "Combo — Levantamiento y tinte + laminado, diseño y tinte", price: 40, unit: "service", desc: "", img: "", active: true }
         ] }
       ]
     },
     {
-      id: "makeup", name: "Luxury Makeup", img: "", categories: [
+      id: "makeup", name: "Luxury Makeup", nameEs: "Maquillaje de lujo", img: "", categories: [
         { id: "makeup-main", name: "Luxury Makeup", items: [
-          { id: "makeup-day", name: "Day Makeup", price: 30, unit: "service", desc: "", img: "", active: true },
-          { id: "makeup-night", name: "Night Makeup", price: 40, unit: "service", desc: "", img: "", active: true }
+          { id: "makeup-day", name: "Day Makeup", nameEs: "Maquillaje de día", price: 30, unit: "service", desc: "", img: "", active: true },
+          { id: "makeup-night", name: "Night Makeup", nameEs: "Maquillaje de noche", price: 40, unit: "service", desc: "", img: "", active: true }
         ] }
       ]
     }
