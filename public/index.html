@@ -64,6 +64,8 @@
   .confirm p{margin-top:10px; font-size:16px; line-height:1.5;}
   .trackbox{margin-top:34px; border-top:1px solid var(--line); padding-top:6px;}
   footer{text-align:center; margin-top:30px; color:var(--gold); font-style:italic; font-size:14px; line-height:1.6;}
+  .allset{font-size:17px; color:var(--dark); margin:2px 0 14px; line-height:1.5;}
+  .allset span{font-style:italic; color:var(--gold); font-size:14.5px;}
   .hidden{display:none;}
   /* ---- progress tracker ---- */
   .mycard{border:1px solid var(--gold-l); background:#fffdf6; border-radius:12px; padding:16px; margin:18px 0 6px;}
@@ -155,8 +157,8 @@
       <div class="confirm">
         <div class="badge">BOOKING RECEIVED · RESERVA RECIBIDA</div>
         <div class="num" id="cNum">#000</div>
-        <p id="cWhat"></p>
-        <p id="cWhen"></p>
+        <p class="allset">You're all set — we can't wait to see you.<br>
+          <span>Ya estás lista — estamos deseando verte.</span></p>
         <div id="doneCard"></div>
         <p style="font-style:italic; color:var(--gold);">
           This page remembers your booking — come back anytime to watch it move.<br>
@@ -230,8 +232,6 @@ function progressHTML(b){
     "<span style='color:var(--dark); font-weight:bold; font-size:15px;'>Total " + money(total) + "</span></div>" +
     svcLines +
     "<div class='mc-when'>" + fmtWhen(b.date, b.time) + "</div>" +
-    "<div class='steps'>" + steps + "</div>" +
-    "<p class='mc-msg" + (bad ? " bad" : "") + "'>" + m.en + "<span class='es'>" + m.es + "</span></p>" +
     (bad ? "" :
       "<div class='arrive'><span class='a-head'>When you arrive · Cuando llegues</span>" +
       "Please bring a <b>photo ID</b>. Check in with <b>security</b> at the front of the building, " +
@@ -239,7 +239,9 @@ function progressHTML(b){
       "<span class='es'>Por favor trae una identificación con foto. Regístrate con seguridad en la " +
       "entrada del edificio y luego dirígete al salón 215 — ahí está Esthetics Rising.</span>" +
       "<span style='display:block; margin-top:7px;'>Questions? Call the college: <b>(305) 248-5723</b>" +
-      "<span class='es' style='display:inline; margin:0;'> · ¿Preguntas? Llama al colegio</span></span></div>");
+      "<span class='es' style='display:inline; margin:0;'> · ¿Preguntas? Llama al colegio</span></span></div>") +
+    "<div class='steps'>" + steps + "</div>" +
+    "<p class='mc-msg" + (bad ? " bad" : "") + "'>" + m.en + "<span class='es'>" + m.es + "</span></p>";
 }
 
 async function fetchBooking(number, phone){
@@ -377,11 +379,6 @@ $("bookBtn").onclick = async () => {
       }));
     } catch (e) {}
     $("cNum").textContent = data.number;
-    $("cWhat").innerHTML = data.services.map(s =>
-      s.name + " — " + money(s.price) +
-      (s.nameEs ? " <span style='font-style:italic; color:var(--gold); font-size:14px;'>(" + s.nameEs + ")</span>" : "")
-    ).join("<br>") + "<br><b>Total: " + money(data.total) + "</b>";
-    $("cWhen").textContent = fmtWhen(data.date, data.time);
     $("doneCard").innerHTML = "";
     const card = document.createElement("div");
     card.className = "mycard";
