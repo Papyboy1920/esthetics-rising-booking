@@ -17,6 +17,9 @@
   header img{width:170px; height:170px; object-fit:contain;}
   h1{font-size:27px; letter-spacing:6px; color:var(--dark); font-weight:600; margin-top:8px;}
   .college{font-style:italic; color:var(--gold); font-size:16px; margin-top:3px;}
+  .phone{margin-top:7px; font-size:16.5px; letter-spacing:1px; color:var(--dark);}
+  .phone a{color:var(--dark); text-decoration:none; border-bottom:1px solid var(--gold-l); font-weight:bold;}
+  footer a{color:var(--gold); text-decoration:none; font-weight:bold;}
   .tag{font-style:italic; color:var(--gold); font-size:14px; margin-top:8px; line-height:1.5;}
   .rule{display:flex; align-items:center; gap:10px; margin:20px auto 4px; max-width:340px;}
   .rule span{flex:1; border-top:1px solid var(--gold-l);}
@@ -98,6 +101,7 @@
         <img src="/img/phoenix.png" alt="Esthetics Rising phoenix logo">
         <h1>ESTHETICS RISING</h1>
         <div class="college">South Dade Technical College</div>
+        <div class="phone">📞 <a href="tel:+13052485723">(305) 248-5723</a></div>
         <div class="tag">Skin · Confidence · Careers — Rising to our maximum potential<br>
           <span>Piel · Confianza · Carreras — Elevándonos a nuestro máximo potencial</span></div>
         <div class="rule"><span></span><i>◆</i><span></span></div>
@@ -163,7 +167,7 @@
     </div>
 
     <footer>
-      Esthetics Rising · South Dade Technical College<br>
+      Esthetics Rising · South Dade Technical College · <a href="tel:+13052485723">(305) 248-5723</a><br>
       Building leaders to infinite potential<br>
       Formando líderes con potencial infinito
     </footer>
@@ -233,7 +237,9 @@ function progressHTML(b){
       "Please bring a <b>photo ID</b>. Check in with <b>security</b> at the front of the building, " +
       "then proceed to <b>Room 215</b> — that's where Esthetics Rising is." +
       "<span class='es'>Por favor trae una identificación con foto. Regístrate con seguridad en la " +
-      "entrada del edificio y luego dirígete al salón 215 — ahí está Esthetics Rising.</span></div>");
+      "entrada del edificio y luego dirígete al salón 215 — ahí está Esthetics Rising.</span>" +
+      "<span style='display:block; margin-top:7px;'>Questions? Call the college: <b>(305) 248-5723</b>" +
+      "<span class='es' style='display:inline; margin:0;'> · ¿Preguntas? Llama al colegio</span></span></div>");
 }
 
 async function fetchBooking(number, phone){
