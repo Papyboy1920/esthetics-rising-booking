@@ -5,7 +5,7 @@
 // nunca se sobrescribe (ver mergeCatalog en db.js).
 // ============================================================
 
-const CATALOG_VERSION = 2;
+const CATALOG_VERSION = 3;
 
 const SEED_CATALOG = {
   departments: [
@@ -34,9 +34,9 @@ const SEED_CATALOG = {
         { id: "lashes-main", name: "Lashes", items: [
           { id: "strip-lashes", name: "Strip Lashes", nameEs: "Pestañas en tira", price: 10, unit: "service", desc: "", img: "", active: true },
           { id: "cluster-lashes", name: "Cluster Lashes", nameEs: "Pestañas en racimo", price: 20, unit: "service", desc: "", img: "", active: true },
-          { id: "ext-classic", name: "Lash Extensions — Classic", nameEs: "Extensiones de pestañas — Clásicas", price: 60, unit: "service", desc: "", img: "", active: true },
-          { id: "ext-hybrid", name: "Lash Extensions — Hybrid", nameEs: "Extensiones de pestañas — Híbridas", price: 75, unit: "service", desc: "", img: "", active: true },
-          { id: "ext-volume", name: "Lash Extensions — Volume", nameEs: "Extensiones de pestañas — Volumen", price: 90, unit: "service", desc: "", img: "", active: true }
+          { id: "ext-classic", name: "Lash Extensions — Classic", nameEs: "Extensiones de pestañas — Clásicas", price: 50, unit: "service", desc: "", img: "", active: true },
+          { id: "ext-hybrid", name: "Lash Extensions — Hybrid", nameEs: "Extensiones de pestañas — Híbridas", price: 50, unit: "service", desc: "", img: "", active: true },
+          { id: "ext-volume", name: "Lash Extensions — Volume", nameEs: "Extensiones de pestañas — Volumen", price: 50, unit: "service", desc: "", img: "", active: true }
         ] }
       ]
     },
@@ -73,4 +73,10 @@ const SEED_SETTINGS = {
 
 const SETTINGS_VERSION = 3;
 
-module.exports = { SEED_CATALOG, CATALOG_VERSION, SEED_SETTINGS, SETTINGS_VERSION };
+// Correcciones de precio ordenadas por la dueña (ROA, 11/17/2026:
+// extensiones Clásicas/Híbridas/Volumen a $50 parejo). La fusión
+// normal NUNCA pisa precios; esto es una orden directa que db.js
+// aplica UNA sola vez, al subir la versión del catálogo.
+const PRICE_FIXES = { "ext-classic": 50, "ext-hybrid": 50, "ext-volume": 50 };
+
+module.exports = { SEED_CATALOG, CATALOG_VERSION, SEED_SETTINGS, SETTINGS_VERSION, PRICE_FIXES };

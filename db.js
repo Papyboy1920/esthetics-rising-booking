@@ -5,7 +5,7 @@
 // ============================================================
 
 const path = require("path");
-const { SEED_CATALOG, CATALOG_VERSION, SEED_SETTINGS, SETTINGS_VERSION } = require("./seed");
+const { SEED_CATALOG, CATALOG_VERSION, SEED_SETTINGS, SETTINGS_VERSION, PRICE_FIXES } = require("./seed");
 
 let kind = null;
 let pool = null;
@@ -131,9 +131,23 @@ async function init() {
       let live = null;
       try { live = JSON.parse(await kvGet("catalog")); } catch { live = null; }
       const m = mergeCatalog(live, SEED_CATALOG);
+      // Correcciones de precio ordenadas por la dueña (PRICE_FIXES en
+      // seed.js): se aplican solo en esta subida de versión; la dueña
+      // puede volver a editar precios en /store después y quedan.
+      let fixed = 0;
+      for (const d of m.catalog.departments || []) {
+        for (const c of d.categories || []) {
+          for (const it of c.items || []) {
+            if (Object.prototype.hasOwnProperty.call(PRICE_FIXES, it.id) && it.price !== PRICE_FIXES[it.id]) {
+              it.price = PRICE_FIXES[it.id];
+              fixed++;
+            }
+          }
+        }
+      }
       await kvSet("catalog", JSON.stringify(m.catalog));
       await kvSet("catalog_version", String(CATALOG_VERSION));
-      console.log(`[esthetics] Catálogo fusionado (v${v} → v${CATALOG_VERSION}): +${m.added} nuevos, ${m.filled} rellenados.`);
+      console.log(`[esthetics] Catálogo fusionado (v${v} → v${CATALOG_VERSION}): +${m.added} nuevos, ${m.filled} rellenados, ${fixed} precios corregidos.`);
     }
   }
   if (!(await kvGet("settings"))) {
